@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youssef Ait Lhaj - Site Officiel</title>
+    <link rel="icon" type="image/png" href="assets/images/profile.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #121212;
+            --bg-sidebar: rgba(24, 24, 24, 0.85);
+            --text-main: #ffffff;
+            --text-sub: #b3b3b3;
+            --accent: #1db954;
+            --card-hover: rgba(255,255,255,0.1);
+        }
+        body.light-theme {
+            --bg-main: #f4f4f9;
+            --bg-sidebar: rgba(255, 255, 255, 0.9);
+            --text-main: #121212;
+            --text-sub: #555555;
+            --accent: #1db954;
+            --card-hover: rgba(0,0,0,0.05);
+        }
+        * { box-sizing: border-box; }
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .bg-blur {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-size: cover;
+            background-position: center;
+            filter: blur(50px) brightness(0.25);
+            z-index: 0;
+            transition: background-image 0.5s ease-in-out;
+            transform: scale(1.1);
+        }
+        
+        .sidebar {
+            width: 380px;
+            background-color: var(--bg-sidebar);
+            backdrop-filter: blur(15px);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 2;
+        }
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .brand-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .sidebar h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--accent);
+        }
+        .nav-links-top {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .sidebar-time {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            background: rgba(255,255,255,0.08);
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.08);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            white-space: nowrap;
+        }
+        .theme-toggle {
+            background: rgba(150, 150, 150, 0.15);
+            border: none;
+            color: var(--text-main);
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.2s;
+        }
+        .theme-toggle:hover { background: var(--accent); color: #000; }
+        
+        .app-menu-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .menu-tab-btn {
+            background: rgba(150, 150, 150, 0.1);
+            border: none;
+            color: var(--text-sub);
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.2s;
+            text-align: left;
+            width: 100%;
+        }
+        .menu-tab-btn:hover, .menu-tab-btn.active-tab-btn {
+            background: var(--accent);
+            color: #000;
+            font-weight: bold;
+        }
+        .menu-tab-btn i { width: 18px; text-align: center; }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 10px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 10px 12px 10px 35px;
+            background: rgba(150, 150, 150, 0.15);
+            border: 1px solid transparent;
+            border-radius: 8px;
+            color: var(--text-main);
+            outline: none;
+            font-size: 0.9rem;
+        }
+        .search-box input:focus { border-color: var(--accent); }
+        .search-box i {
+            position: absolute; left: 12px; top: 50%;
+            transform: translateY(-50%); color: var(--text-sub); font-size: 0.85rem;
+        }
+        
+        .add-song-btn {
+            background: rgba(29, 185, 84, 0.2);
+            border: 1px dashed var(--accent);
+            color: var(--accent);
+            width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            transition: 0.2s;
+        }
+        .add-song-btn:hover { background: var(--accent); color: #000; }
+
+        .playlist-stats {
+            font-size: 0.85rem; color: var(--text-sub); margin-bottom: 10px;
+            display: flex; justify-content: space-between;
+        }
+        .playlist-container {
+            flex-grow: 1; overflow-y: auto; padding-right: 5px;
+        }
+        .playlist-container::-webkit-scrollbar { width: 6px; }
+        .playlist-container::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        .song-item {
+            display: flex; align-items: center; padding: 10px;
+            border-radius: 8px; cursor: pointer; margin-bottom: 8px; transition: background 0.2s;
+        }
+        .song-item:hover { background-color: var(--card-hover); }
+        .song-item.active { background-color: var(--card-hover); border-left: 4px solid var(--accent); }
+        .song-item img {
+            width: 45px; height: 45px; border-radius: 6px; object-fit: cover; margin-right: 12px;
+        }
+        .song-info { flex-grow: 1; overflow: hidden; }
+        .song-info .title { font-size: 0.95rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .song-info .artist { font-size: 0.8rem; color: var(--text-sub); margin-top: 3px; }
+        .song-info .filename { font-size: 0.75rem; color: var(--text-sub); margin-top: 2px; }
+
+        .file-names-detail { font-size: 0.75rem; color: var(--text-sub); margin-top: 4px; line-height: 1.4; }
+
+        .main-content-area {
+            flex-grow: 1; position: relative; z-index: 1; display: flex; overflow: hidden;
+        }
+        .page-view {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; overflow-y: auto;
+        }
+        .page-view.active { display: flex; }
+
+        .cover-art {
+            width: 180px; height: 180px; object-fit: cover; border-radius: 14px;
+            background-color: #000; box-shadow: 0 15px 35px rgba(0,0,0,0.8); margin-bottom: 12px;
+        }
+        .visualizer {
+            display: flex; align-items: flex-end; gap: 5px; height: 20px; margin-bottom: 8px;
+        }
+        .bar { width: 4px; height: 6px; background-color: var(--accent); border-radius: 3px; }
+        .playing .bar { animation: bounce 0.6s infinite alternate ease-in-out; }
+        .playing .bar:nth-child(1) { animation-duration: 0.4s; }
+        .playing .bar:nth-child(2) { animation-duration: 0.7s; }
+        .playing .bar:nth-child(3) { animation-duration: 0.5s; }
+        .playing .bar:nth-child(4) { animation-duration: 0.6s; }
+        .playing .bar:nth-child(5) { animation-duration: 0.45s; }
+        @keyframes bounce { 0% { height: 6px; } 100% { height: 18px; } }
+
+        .player-info { text-align: center; margin-bottom: 8px; }
+        .player-info h2 { margin: 0 0 3px 0; font-size: 1.15rem; display: inline-block; }
+        .player-info p { margin: 0; color: var(--text-sub); font-size: 0.82rem; }
+        .song-credits-detail { font-size: 0.75rem; color: var(--text-sub); margin-top: 2px; opacity: 0.85; }
+        .play-stats-counter { font-size: 0.75rem; color: var(--accent); margin-top: 2px; }
+
+        .favorite-btn {
+            background: none; border: none; color: #ff4757; font-size: 1.05rem;
+            cursor: pointer; margin-left: 6px; vertical-align: middle; transition: transform 0.2s;
+        }
+        .favorite-btn:hover { transform: scale(1.2); }
+
+        .social-links { display: flex; gap: 10px; margin-top: 5px; justify-content: center; }
+        .social-links a { color: var(--text-sub); font-size: 0.95rem; transition: 0.2s; }
+        .social-links a:hover { color: var(--accent); transform: scale(1.15); }
+
+        .action-row-buttons {
+            display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; justify-content: center; max-width: 650px;
+        }
+        .action-btn {
+            background: rgba(150, 150, 150, 0.15); border: none; color: var(--text-main);
+            padding: 6px 10px; border-radius: 8px; font-size: 0.78rem; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.2s;
+        }
+        .action-btn:hover { background: var(--accent); color: #000; }
+        .action-btn.delete { background: rgba(255, 71, 87, 0.2); color: #ff4757; }
+        .action-btn.delete:hover { background: #ff4757; color: #fff; }
+
+        .speed-selector {
+            background: rgba(150, 150, 150, 0.2); border: none; color: var(--text-main);
+            padding: 5px 8px; border-radius: 10px; font-size: 0.75rem; cursor: pointer; outline: none;
+        }
+        .speed-selector option { background: #222; color: #fff; }
+
+        .controls { display: flex; align-items: center; gap: 15px; margin-bottom: 8px; }
+        .btn-icon { background: none; border: none; color: var(--text-sub); font-size: 1.05rem; cursor: pointer; transition: 0.2s; position: relative; }
+        .btn-icon:hover { color: var(--text-main); transform: scale(1.1); }
+        .btn-icon.active-mode { color: var(--accent); }
+        .btn-play {
+            background-color: var(--accent); color: #000; width: 42px; height: 42px;
+            border-radius: 50%; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; padding-left: 2px;
+        }
+        .btn-play:hover { transform: scale(1.08); background-color: #1ed760; }
+
+        .progress-container {
+            width: 100%; max-width: 400px; display: flex; align-items: center; gap: 10px; font-size: 0.75rem; color: var(--text-sub); margin-bottom: 8px;
+        }
+        
+        .progress-bar, .volume-bar {
+            flex-grow: 1; height: 5px; -webkit-appearance: none; appearance: none; background: #4d4d4d; border-radius: 3px; cursor: pointer; outline: none;
+        }
+        .progress-bar::-webkit-slider-thumb, .volume-bar::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: #ffffff; cursor: pointer; box-shadow: 0 0 4px rgba(0,0,0,0.5);
+        }
+
+        .volume-container { display: flex; align-items: center; gap: 8px; width: 140px; color: var(--text-sub); font-size: 0.78rem; }
+
+        .generic-box {
+            max-width: 650px; width: 100%; background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(15px); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); max-height: 85vh; overflow-y: auto;
+        }
+        .generic-box h2 { color: var(--accent); margin-top: 0; }
+        
+        .lang-switcher { display: flex; gap: 8px; margin-bottom: 12px; }
+        .lang-btn {
+            background: rgba(150,150,150,0.15); border: none; color: var(--text-sub);
+            padding: 5px 12px; border-radius: 12px; font-size: 0.8rem; cursor: pointer; transition: 0.2s;
+        }
+        .lang-btn.active-lang { background: var(--accent); color: #000; font-weight: bold; }
+
+        .booking-form {
+            display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 12px;
+        }
+        .booking-form input, .booking-form textarea {
+            width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); background-color: rgba(255, 255, 255, 0.05); color: #fff; outline: none; font-size: 0.9rem;
+        }
+        .booking-form input:focus, .booking-form textarea:focus { border-color: var(--accent); }
+        
+        .booking-btn {
+            width: 100%; background: var(--accent); color: #000; text-align: center; padding: 10px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none;
+        }
+        .booking-btn.whatsapp { background: #25d366; color: #fff; margin-top: 6px; }
+
+        .agenda-section { background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 10px; margin-top: 12px; border-left: 4px solid var(--accent); }
+        .agenda-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem; padding: 5px 0; }
+        .agenda-date { color: var(--accent); font-weight: bold; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-box {
+            background: #1c1c1c; border: 1px solid rgba(255,255,255,0.15); width: 550px; max-width: 90%;
+            border-radius: 14px; padding: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            max-height: 90vh; overflow-y: auto;
+        }
+        .modal-box h2 { color: var(--accent); font-size: 1.2rem; margin-top: 0; display: flex; align-items: center; gap: 8px; }
+        .modal-field { margin-bottom: 12px; }
+        .modal-field label { display: block; font-size: 0.85rem; color: var(--text-sub); margin-bottom: 5px; }
+        .modal-field input[type="text"], .modal-field textarea {
+            width: 100%; padding: 10px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px; color: #fff; font-size: 0.9rem; outline: none;
+        }
+        .modal-field input:focus, .modal-field textarea:focus { border-color: var(--accent); }
+        .file-input-fake {
+            background: rgba(255,255,255,0.06); border: 1px dashed rgba(255,255,255,0.2); border-radius: 8px;
+            padding: 10px; text-align: center; color: var(--text-sub); font-size: 0.85rem; cursor: pointer;
+        }
+        .file-input-fake:hover { border-color: var(--accent); color: var(--accent); }
+        .modal-actions { display: flex; gap: 10px; margin-top: 15px; }
+        .modal-btn {
+            flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; font-size: 0.9rem;
+        }
+        .modal-btn.save { background: var(--accent); color: #000; }
+        .modal-btn.cancel { background: rgba(255,255,255,0.1); color: #fff; }
+
+        .sync-lines-container {
+            max-height: 250px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin-top: 10px;
+        }
+        .sync-line-item {
+            display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.9rem;
+        }
+        .sync-line-item.current-sync { background: rgba(29, 185, 84, 0.2); border-left: 3px solid var(--accent); }
+        .sync-time-badge { font-family: monospace; color: var(--accent); font-size: 0.85rem; }
+        .visitor-hidden { display: none !important; }
+    </style>
+</head>
+<body id="pageBody">
+
+    <div class="bg-blur" id="bgBlur"></div>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="brand-title">
+                <img src="assets/images/profile.jpg" alt="Logo" class="brand-logo">
+                <h3>Youssef Ait Lhaj</h3>
+            </div>
+            <div class="nav-links-top">
+                <div class="sidebar-time" id="gmtClock">GMT: --:--</div>
+                <i class="fa-solid fa-moon theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Mode clair / sombre"></i>
+            </div>
+        </div>
+
+        <div class="app-menu-nav">
+            <button class="menu-tab-btn active-tab-btn" onclick="switchPage('accueil')"><i class="fa-solid fa-house"></i> Accueil</button>
+            <button class="menu-tab-btn" onclick="switchPage('portfolio')"><i class="fa-solid fa-compact-disc"></i> Portfolio & Lecteur</button>
+            <button class="menu-tab-btn" onclick="switchPage('bio')"><i class="fa-solid fa-user"></i> Biographie</button>
+            <button class="menu-tab-btn" onclick="switchPage('agenda')"><i class="fa-solid fa-calendar-days"></i> Agenda</button>
+            <button class="menu-tab-btn" onclick="switchPage('boutique')"><i class="fa-solid fa-store"></i> Boutique</button>
+            <button class="menu-tab-btn" onclick="switchPage('booking')"><i class="fa-solid fa-paper-plane"></i> Booking & Contact</button>
+        </div>
+        
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Rechercher une chanson..." oninput="filterPlaylist()">
+        </div>
+
+        <div class="playlist-stats">
+            <span id="totalSongsCount">Total: 0 chansons</span>
+            <span id="listenedCount">Écoutées: 0</span>
+        </div>
+
+        <div class="playlist-container" id="playlistContainer"></div>
+    </div>
+
+    <div class="main-content-area">
+
+        <!-- Accueil -->
+        <div class="page-view active" id="accueilView">
+            <div class="generic-box" style="text-align: center; max-width: 700px;">
+                <img src="assets/images/profile.jpg" alt="Youssef Ait Lhaj" style="width: 180px; height: 180px; border-radius: 50%; object-fit: cover; border: 4px solid var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.6); margin-bottom: 15px;">
+                <h2>Youssef Ait Lhaj - Site Officiel</h2>
+                <p style="color: var(--text-sub); line-height: 1.6; font-size: 1rem;">
+                    Bienvenue sur mon portail officiel pour découvrir la richesse de la musique amazighe et de l'art de l'Atlas avec une touche contemporaine.
+                </p>
+                <button class="booking-btn" style="margin-top: 15px; display: inline-block; width: auto; padding: 10px 25px;" onclick="switchPage('portfolio')">
+                    <i class="fa-solid fa-compact-disc"></i> Écouter les œuvres
+                </button>
+            </div>
+        </div>
+
+        <!-- Portfolio & Lecteur -->
+        <div class="page-view" id="portfolioView">
+            <img id="albumCover" class="cover-art" src="" alt="Couverture">
+
+            <div class="visualizer" id="visualizer">
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            </div>
+
+            <div class="player-info">
+                <div>
+                    <h2 id="songTitle">Titre de la chanson</h2>
+                    <button class="favorite-btn" id="favBtn" onclick="toggleFavorite()" title="Favoris">
+                        <i class="fa-regular fa-heart" id="favIcon"></i>
+                    </button>
+                </div>
+                <p id="artistName">Youssef Ait Lhaj - dihya</p>
+                <div class="song-credits-detail" id="songCreditsDetail">Paroles : Youssef Ait Lhaj | Compositeur : Youssef Ait Lhaj</div>
+                <div class="play-stats-counter" id="playStatsCounter">Nombre de lectures : 0</div>
+                <div class="file-names-detail" id="fileNamesDetail"></div>
+                
+                <div class="social-links">
+                    <a href="https://www.facebook.com/youssef.aitlhaj.148" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://www.instagram.com/yaitlhaj.official/?hl=fr" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@youssef_aitlhaj" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="https://open.spotify.com/intl-fr/artist/1GecIv0ToreS5wxQDvxh85" target="_blank"><i class="fa-brands fa-spotify"></i></a>
+                    <a href="https://www.youtube.com/@youssefaitlhaj" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="action-row-buttons">
+                <button id="lyricsBtn" class="action-btn" onclick="openLyricsModal()"><i class="fa-solid fa-align-left"></i> Paroles & Crédits</button>
+            </div>
+
+            <div class="action-row-buttons">
+                <button class="action-btn" onclick="shareSong()"><i class="fa-solid fa-share-nodes"></i> Partager</button>
+                <select class="speed-selector" id="speedSelector" onchange="changeSpeed()">
+                    <option value="0.75">0.75x</option>
+                    <option value="1" selected>1.0x</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="2">2.0x</option>
+                </select>
+            </div>
+
+            <div class="controls">
+                <button class="btn-icon" id="shuffleBtn" onclick="toggleShuffle()" title="Lecture aléatoire"><i class="fa-solid fa-shuffle"></i></button>
+                <button class="btn-icon" onclick="prevSong()"><i class="fa-solid fa-backward-step"></i></button>
+                <button class="btn-icon btn-play" id="playBtn" onclick="togglePlay()"><i class="fa-solid fa-play" id="playIcon"></i></button>
+                <button class="btn-icon" onclick="nextSong()"><i class="fa-solid fa-forward-step"></i></button>
+                <button class="btn-icon" id="repeatBtn" onclick="toggleRepeat()" title="Répéter"><i class="fa-solid fa-repeat"></i></button>
+            </div>
+
+            <div class="progress-container">
+                <span id="currentTime">0:00</span>
+                <input type="range" id="progressBar" class="progress-bar" value="0" min="0" max="100">
+                <span id="duration">0:00</span>
+            </div>
+
+            <div class="volume-container">
+                <i class="fa-solid fa-volume-high" id="volumeIcon"></i>
+                <input type="range" id="volumeBar" class="volume-bar" value="100" min="0" max="100" oninput="changeVolume()">
+            </div>
+        </div>
+
+        <!-- Biographie -->
+        <div class="page-view" id="bioView">
+            <div class="generic-box" dir="ltr" style="text-align: left;">
+                <div class="lang-switcher">
+                    <button class="lang-btn active-lang" onclick="setBioLang('fr')">Français</button>
+                    <button class="lang-btn" onclick="setBioLang('ar')">العربية</button>
+                    <button class="lang-btn" onclick="setBioLang('en')">English</button>
+                </div>
+                <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
+                    <img src="assets/images/profile.jpg" alt="Youssef Ait Lhaj" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent);">
+                    <div>
+                        <h2>Youssef Ait Lhaj</h2>
+                        <p style="color: var(--text-sub); margin: 0;" id="bioSubtitle">Artiste, Auteur & Musicien - Amazigh</p>
+                    </div>
+                </div>
+                <p style="color: var(--text-sub); line-height: 1.6; font-size: 0.95rem;" id="bioText">
+                    Youssef Ait Lhaj est un éminent artiste, auteur et musicien amazigh originaire de la ville d'Itzer, dans la province de Midelt, au cœur du Moyen Atlas...
+                </p>
+            </div>
+        </div>
+
+        <!-- Agenda -->
+        <div class="page-view" id="agendaView">
+            <div class="generic-box" dir="ltr" style="text-align: left;">
+                <h2>Agenda des Événements</h2>
+                <div class="agenda-section">
+                    <div class="agenda-item"><span>Concert au Festival de l'Atlas</span><span class="agenda-date">Bientôt</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Boutique -->
+        <div class="page-view" id="boutiqueView">
+            <div class="generic-box" style="text-align: center;">
+                <h2>Boutique Officielle</h2>
+                <p style="color: var(--text-sub);">Bientôt disponible...</p>
+            </div>
+        </div>
+
+        <!-- Booking -->
+        <div class="page-view" id="bookingView">
+            <div class="generic-box" dir="ltr" style="text-align: left;">
+                <h2>Booking & Contact</h2>
+                <form action="https://formspree.io/f/mgawvzgg" method="POST" class="booking-form">
+                    <input type="text" name="name" placeholder="Nom complet" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <textarea name="message" placeholder="Message" required style="height: 70px; resize: none;"></textarea>
+                    <button type="submit" class="booking-btn"><i class="fa-solid fa-paper-plane"></i> Envoyer</button>
+                </form>
+                <a href="https://wa.me/" target="_blank" class="booking-btn whatsapp"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modals Popup -->
+    <div class="modal-overlay" id="addSongModal">
+        <div class="modal-box">
+            <h2><i class="fa-solid fa-compact-disc"></i> Ajouter une nouvelle chanson</h2>
+            <div class="modal-field">
+                <label>Titre de la chanson :</label>
+                <input type="text" id="newSongTitleInput" placeholder="Ex: Titre de la chanson">
+            </div>
+            <div class="modal-field">
+                <label>Artistes (jusqu'à 3) :</label>
+                <input type="text" id="newSongArtistInput1" placeholder="Artiste principal" style="margin-bottom: 8px;">
+                <input type="text" id="newSongArtistInput2" placeholder="Artiste invité 1 (facultatif)" style="margin-bottom: 8px;">
+                <input type="text" id="newSongArtistInput3" placeholder="Artiste invité 2 (facultatif)">
+            </div>
+            <div class="modal-field">
+                <label>Fichier audio (MP3 / Audio) :</label>
+                <div class="file-input-fake" onclick="document.getElementById('audioFileInput').click()">
+                    <i class="fa-solid fa-music"></i> <span id="audioFileNameDisp">Choisir le fichier audio...</span>
+                </div>
+                <input type="file" id="audioFileInput" accept="audio/*" style="display:none" onchange="updateFileName(this, 'audioFileNameDisp')">
+            </div>
+            <div class="modal-field">
+                <label>Image de couverture (Cover) :</label>
+                <div class="file-input-fake" onclick="document.getElementById('coverFileInput').click()">
+                    <i class="fa-solid fa-image"></i> <span id="coverFileNameDisp">Choisir l'image de couverture...</span>
+                </div>
+                <input type="file" id="coverFileInput" accept="image/*" style="display:none" onchange="updateFileName(this, 'coverFileNameDisp')">
+            </div>
+            <div class="modal-field">
+                <label>Auteur (Paroles) :</label>
+                <input type="text" id="newSongAuthorInput" placeholder="Ex: Youssef Ait Lhaj" value="Youssef Ait Lhaj">
+            </div>
+            <div class="modal-field">
+                <label>Compositeur :</label>
+                <input type="text" id="newSongComposerInput" placeholder="Ex: Youssef Ait Lhaj" value="Youssef Ait Lhaj">
+            </div>
+            <div class="modal-field" style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" id="isRepriseCheck" style="width: 16px; height: 16px; cursor: pointer;" onchange="toggleOriginalArtistField('new')">
+                <label for="isRepriseCheck" style="margin: 0; cursor: pointer;">C'est une reprise (Cover) ?</label>
+            </div>
+            <div class="modal-field" id="originalArtistFieldNew" style="display: none;">
+                <label>Artiste d'origine (Original Artist) :</label>
+                <input type="text" id="newOriginalArtistInput" placeholder="Ex: Rouicha Mohamed">
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="modal-btn save" onclick="saveNewSong()"><i class="fa-solid fa-check"></i> Enregistrer</button>
+                <button type="button" class="modal-btn cancel" onclick="closeAddSongModal()">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة تعديل الأغنية (تتضمن الآن تعديل اسم المغني) -->
+    <div class="modal-overlay" id="editSongModal">
+        <div class="modal-box">
+            <h2><i class="fa-solid fa-pen"></i> Modifier la chanson</h2>
+            <div class="modal-field">
+                <label>Titre de la chanson :</label>
+                <input type="text" id="editSongTitleInput">
+            </div>
+            <div class="modal-field">
+                <label>Nom de l'artiste / Chanteur :</label>
+                <input type="text" id="editArtistNameInput" placeholder="Ex: Youssef Ait Lhaj - Dihya">
+            </div>
+            <div class="modal-field">
+                <label>Changer le fichier audio (MP3) :</label>
+                <div class="file-input-fake" onclick="document.getElementById('editAudioFileInput').click()">
+                    <i class="fa-solid fa-music"></i> <span id="editAudioFileNameDisp"><i class="fa-solid fa-check" style="color:var(--accent);"></i> Fichier actuel conservé</span>
+                </div>
+                <input type="file" id="editAudioFileInput" accept="audio/*" style="display:none" onchange="updateFileName(this, 'editAudioFileNameDisp')">
+            </div>
+            <div class="modal-field">
+                <label>Changer l'image de couverture (Cover) :</label>
+                <div class="file-input-fake" onclick="document.getElementById('editCoverFileInput').click()">
+                    <i class="fa-solid fa-image"></i> <span id="editCoverFileNameDisp"><i class="fa-solid fa-check" style="color:var(--accent);"></i> Image actuelle conservée</span>
+                </div>
+                <input type="file" id="editCoverFileInput" accept="image/*" style="display:none" onchange="updateFileName(this, 'editCoverFileNameDisp')">
+            </div>
+            <div class="modal-field">
+                <label>Auteur (Paroles) :</label>
+                <input type="text" id="editSongAuthorInput">
+            </div>
+            <div class="modal-field">
+                <label>Compositeur :</label>
+                <input type="text" id="editSongComposerInput">
+            </div>
+            <div class="modal-field" style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" id="editIsRepriseCheck" style="width: 16px; height: 16px; cursor: pointer;" onchange="toggleOriginalArtistField('edit')">
+                <label for="editIsRepriseCheck" style="margin: 0; cursor: pointer;">C'est une reprise (Cover) ?</label>
+            </div>
+            <div class="modal-field" id="originalArtistFieldEdit" style="display: none;">
+                <label>Artiste d'origine (Original Artist) :</label>
+                <input type="text" id="editOriginalArtistInput" placeholder="Ex: Rouicha Mohamed">
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn save" onclick="saveEditedSong()"><i class="fa-solid fa-check"></i> Enregistrer les modifications</button>
+                <button class="modal-btn cancel" onclick="closeEditSongModal()">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="editLyricsModal">
+        <div class="modal-box">
+            <h2><i class="fa-solid fa-pen-to-square"></i> كتابة أو لصق كلمات الأغنية</h2>
+            <p style="color: var(--text-sub); font-size: 0.82rem; margin-top: -5px;">اكتب كل سطر في صف مستقل.</p>
+            <div class="modal-field">
+                <textarea id="lyricsTextInput" style="height: 180px; resize: vertical;" placeholder="السطر الأول&#10;السطر الثاني&#10;...السطر الثالث"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn save" onclick="saveLyricsText()"><i class="fa-solid fa-check"></i> حفظ الكلمات</button>
+                <button class="modal-btn cancel" onclick="closeEditLyricsTextModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="syncModal">
+        <div class="modal-box" style="width: 600px;">
+            <h2><i class="fa-solid fa-microphone"></i> المزامنة التلقائية (اضغط Space لتسجيل الوقت)</h2>
+            <p style="color: var(--text-sub); font-size: 0.82rem; margin-top: -5px;">قم بتشغيل الأغنية، ومع كل سطر يغنيه الفنان اضغط على مفتاح <b>Space</b> في لوحة المفاتيح لتسجيل التوقيت بدقة!</p>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; margin-bottom: 10px;">
+                <span id="syncCurrentAudioTime" style="font-family: monospace; color: var(--accent); font-weight: bold; font-size: 1rem;">00:00</span>
+                <button class="action-btn" onclick="toggleSyncPlayAudio()" id="syncPlayBtn"><i class="fa-solid fa-play"></i> تشغيل / إيقاف الأغنية</button>
+            </div>
+
+            <div class="sync-lines-container" id="syncLinesContainer"></div>
+
+            <div class="modal-actions">
+                <button class="modal-btn save" onclick="saveSyncedLyrics()"><i class="fa-solid fa-check"></i> حفظ التوقيتات</button>
+                <button class="modal-btn cancel" onclick="closeSyncModal()">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="lyricsViewerModal">
+        <div class="modal-box" style="text-align: center;">
+            <h2>Paroles & Crédits</h2>
+            <div id="lyricsDisplayArea" style="max-height: 250px; overflow-y: auto; padding: 10px; color: var(--text-main); font-size: 0.95rem; line-height: 1.8;">
+                لا توجد كلمات مسجلة لهذه الأغنية بعد.
+            </div>
+            <div class="modal-actions" style="margin-top: 15px;">
+                <button class="modal-btn cancel" onclick="document.getElementById('lyricsViewerModal').classList.remove('active')">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <audio id="myAudio"></audio>
+
+    <script>
+        if (localStorage.getItem("site_version") !== "v2.6") {
+            localStorage.removeItem("youssef_songs_data");
+            localStorage.setItem("site_version", "v2.6");
+        }
+
+        const defaultSongs = [
+            { title: "Ahra9 aynnagh", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/Ahra9 aynnagh.mp3", cover: "assets/images/cover Ahra9 aynnagh.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 1, favorite: false, lyrics: [] },
+            { title: "AMAZAN", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/AMAZAN.mp3", cover: "assets/images/cover Awra adachinikh.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "Aritru", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/aritru.mp3", cover: "assets/images/cover aritru.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "Awra adachinikh", artist: "Youssef Ait Lhaj - Dihya - Nabil Bajja", file: "assets/audio/Awra adachinikh.mp3", cover: "assets/images/cover Awra adachinikh.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "Awra Ghouri", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/Awra Ghouri.mp3", cover: "assets/images/cover Awra Ghouri.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "AYACHNIGH ANMOIN", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/AYACHNIGH ANMOIN.mp3", cover: "assets/images/cover AYACHNIGH ANMOIN.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "Ayulinw awa", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/Ayulinw awa.mp3", cover: "assets/images/cover Ayulinw awa.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "Aywa yawa", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/aywa yawa.mp3", cover: "assets/images/cover aywa yawa.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "Chgin Trid Titrit", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/Chgin Trid Titrit.mp3", cover: "assets/images/cover Chgin Trid Titrit.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "Golti Mazal Kathab", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/Golti Mazal Kathab.mp3", cover: "assets/images/cover Golti Mazal Kathab.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "Hawl awa Hawl", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/Hawl awa Hawl.mp3", cover: "assets/images/cover Hawl awa Hawl.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "Hjarni hbibi", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/Hjarni hbibi.mp3", cover: "assets/images/cover Hjarni hbibi.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "Khoutroud", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/Khoutroud.mp3", cover: "assets/images/cover Khoutroud.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "Kissma w Nassib", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/Kissma w Nassib.mp3", cover: "assets/images/cover Kissma w Nassib.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "Ma bda lhob binatna", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/ma bda lhob binatna.mp3", cover: "assets/images/cover ma bda lhob binatna.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "Mach Ibrin", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/Mach Ibrin.mp3", cover: "assets/images/cover Mach Ibrin.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "Moul Lkoutchi", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/Moul Lkoutchi.mp3", cover: "assets/images/cover Moul Lkoutchi.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "Tdid ayma tsafrd", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/Tdid ayma tsafrd.mp3", cover: "assets/images/cover Tdid ayma tsafrd.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "TFA7 BLADI", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/TFA7 BLADI.mp3", cover: "assets/images/cover tfa7 bladi.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "Ya ghzali", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/Ya ghzali.mp3", cover: "assets/images/cover ya ghzali.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "Ya li lik", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/ya li lik.mp3", cover: "assets/images/cover yali lik.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] },
+            { title: "YACH AYMANOU", artist: "Youssef Ait Lhaj - dihya", file: "assets/audio/YACH AYMANOU.mp3", cover: "assets/images/cover YACH AYMANOU.jpg", author: "Youssef Ait Lhaj", composer: "Youssef Ait Lhaj", isReprise: false, originalArtist: "", plays: 0, favorite: false, lyrics: [] }
+        ];
+
+        let songs = JSON.parse(localStorage.getItem("youssef_songs_data")) || defaultSongs;
+
+        let currentSongIndex = 0;
+        let isPlaying = false;
+        let isShuffle = false;
+        let isRepeat = false;
+        let listenedSongs = new Set();
+        let syncCurrentLineIndex = 0;
+        let currentAudioUrl = "";
+        let currentCoverUrl = "";
+        let playlistBlobUrls = [];
+
+        const audio = document.getElementById("myAudio");
+        const playBtn = document.getElementById("playBtn");
+        const playIcon = document.getElementById("playIcon");
+        const songTitle = document.getElementById("songTitle");
+        const artistName = document.getElementById("artistName");
+        const albumCover = document.getElementById("albumCover");
+        const bgBlur = document.getElementById("bgBlur");
+        const progressBar = document.getElementById("progressBar");
+        const volumeBar = document.getElementById("volumeBar");
+        const currentTimeEl = document.getElementById("currentTime");
+        const durationEl = document.getElementById("duration");
+        const playlistContainer = document.getElementById("playlistContainer");
+        const totalSongsCount = document.getElementById("totalSongsCount");
+        const listenedCount = document.getElementById("listenedCount");
+        const visualizer = document.getElementById("visualizer");
+        const favIcon = document.getElementById("favIcon");
+
+        function updateSliderBackground(slider) {
+            const value = (slider.value - slider.min) / (slider.max - slider.min) * 100;
+            slider.style.background = `linear-gradient(to right, var(--accent) ${value}%, #4d4d4d ${value}%)`;
+        }
+
+        function isVisitorMode() {
+            return document.body.classList.contains('visitor-mode');
+        }
+
+        function isAdminMode() {
+            return !isVisitorMode();
+        }
+
+        function enableVisitorMode() {
+            document.body.classList.add('visitor-mode');
+            document.getElementById('addSongBtn')?.classList.add('visitor-hidden');
+            document.getElementById('editSongBtn')?.classList.add('visitor-hidden');
+            document.getElementById('deleteSongBtn')?.classList.add('visitor-hidden');
+            document.getElementById('syncBtn')?.classList.add('visitor-hidden');
+            document.getElementById('writeLyricsBtn')?.classList.add('visitor-hidden');
+        }
+
+        function applyAccessMode() {
+            enableVisitorMode();
+        }
+
+        let currentClockTime = null;
+        let currentClockLabel = 'GMT+1';
+
+        function formatClockLabel(date, label) {
+            const hours = date.getUTCHours();
+            const minutes = date.getUTCMinutes();
+            const seconds = date.getUTCSeconds();
+            const formatted = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            return `${label}: ${formatted}`;
+        }
+
+        function renderClock(date, label) {
+            const clockEl = document.getElementById('gmtClock');
+            if (clockEl) {
+                clockEl.innerText = formatClockLabel(date, label);
+            }
+        }
+
+        function updateLocalFallbackClock() {
+            const now = new Date();
+            const offset = 1;
+            const utcHours = now.getUTCHours();
+            const localHours = (utcHours + offset + 24) % 24;
+            const minutes = now.getUTCMinutes();
+            const seconds = now.getUTCSeconds();
+            const formatted = `${String(localHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            const clockEl = document.getElementById('gmtClock');
+            if (clockEl) {
+                clockEl.innerText = `GMT+1: ${formatted}`;
+            }
+        }
+
+        async function syncInternetClock() {
+            const sources = [
+                {
+                    name: 'worldtimeapi',
+                    url: 'https://worldtimeapi.org/api/timezone/Africa/Casablanca',
+                    parse: data => {
+                        const match = data.datetime && data.datetime.match(/T(\d{2}):(\d{2}):(\d{2})/);
+                        const offset = data.utc_offset || '+01:00';
+                        if (!match) throw new Error('Invalid worldtimeapi datetime');
+                        return { hours: Number(match[1]), minutes: Number(match[2]), seconds: Number(match[3]), offset };
+                    }
+                },
+                {
+                    name: 'timeapiio',
+                    url: 'https://timeapi.io/api/Time/current/zone?timeZone=Africa/Casablanca',
+                    parse: data => {
+                        const match = data.time && data.time.match(/(\d{2}):(\d{2}):(\d{2})/);
+                        const offset = data.utcOffset || '+01:00';
+                        if (!match) throw new Error('Invalid timeapi.io time');
+                        return { hours: Number(match[1]), minutes: Number(match[2]), seconds: Number(match[3]), offset };
+                    }
+                }
+            ];
+
+            for (const source of sources) {
+                try {
+                    const response = await fetch(source.url);
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    const data = await response.json();
+                    const { hours, minutes, seconds, offset } = source.parse(data);
+                    const nowUtc = new Date();
+                    currentClockTime = new Date(Date.UTC(nowUtc.getUTCFullYear(), nowUtc.getUTCMonth(), nowUtc.getUTCDate(), hours, minutes, seconds));
+                    currentClockLabel = `GMT${offset} (internet)`;
+                    renderClock(currentClockTime, currentClockLabel);
+                    return;
+                } catch (error) {
+                    console.warn(`Clock sync failed for ${source.name}:`, error);
+                }
+            }
+
+            if (!currentClockTime) {
+                currentClockTime = new Date(Date.now() + 3600 * 1000);
+            }
+            currentClockLabel = 'GMT+1';
+            updateLocalFallbackClock();
+        }
+
+        function tickClock() {
+            if (currentClockTime) {
+                currentClockTime.setUTCSeconds(currentClockTime.getUTCSeconds() + 1);
+                renderClock(currentClockTime, currentClockLabel);
+            } else {
+                updateLocalFallbackClock();
+            }
+        }
+
+        async function initGmtClock() {
+            await syncInternetClock();
+            setInterval(tickClock, 1000);
+            setInterval(syncInternetClock, 5 * 60 * 1000);
+        }
+
+        const dbName = "YoussefMusicDB";
+        const dbVersion = 1;
+        const fileStoreName = "songFiles";
+
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(dbName, dbVersion);
+                request.onupgradeneeded = event => {
+                    const db = event.target.result;
+                    if (!db.objectStoreNames.contains(fileStoreName)) {
+                        db.createObjectStore(fileStoreName, { keyPath: "id" });
+                    }
+                };
+                request.onsuccess = event => resolve(event.target.result);
+                request.onerror = event => reject(event.target.error);
+            });
+        }
+
+        async function saveBlob(id, blob) {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(fileStoreName, "readwrite");
+                const store = transaction.objectStore(fileStoreName);
+                const request = store.put({ id, blob });
+                request.onsuccess = () => resolve();
+                request.onerror = event => reject(event.target.error);
+            });
+        }
+
+        async function getBlob(id) {
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(fileStoreName, "readonly");
+                const store = transaction.objectStore(fileStoreName);
+                const request = store.get(id);
+                request.onsuccess = event => resolve(event.target.result ? event.target.result.blob : null);
+                request.onerror = event => reject(event.target.error);
+            });
+        }
+
+        async function deleteBlob(id) {
+            if (!id) return;
+            const db = await openDB();
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(fileStoreName, "readwrite");
+                const store = transaction.objectStore(fileStoreName);
+                const request = store.delete(id);
+                request.onsuccess = () => resolve();
+                request.onerror = event => reject(event.target.error);
+            });
+        }
+
+        async function resolveSongAudioSrc(song) {
+            if (song.audioBlobId) {
+                const blob = await getBlob(song.audioBlobId);
+                if (blob) return URL.createObjectURL(blob);
+            }
+            return song.file || "";
+        }
+
+        async function resolveSongCoverSrc(song) {
+            if (song.coverBlobId) {
+                const blob = await getBlob(song.coverBlobId);
+                if (blob) return URL.createObjectURL(blob);
+            }
+            return song.cover || "assets/images/profile.jpg";
+        }
+
+        function revokeObjectUrl(url) {
+            if (typeof url === 'string' && url.startsWith('blob:')) {
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        function saveSongsToLocalStorage() {
+            try {
+                localStorage.setItem("youssef_songs_data", JSON.stringify(songs));
+            } catch (error) {
+                console.error("LocalStorage write failed:", error);
+                alert("Impossible d'enregistrer la chanson dans le navigateur. Espace de stockage insuffisant.");
+            }
+        }
+
+        function getSongAudioSource(song) {
+            if (!song || !song.file) return "";
+            if (typeof song.file === 'string' && song.file.startsWith('blob:')) return "";
+            return song.file;
+        }
+
+        function getSongCoverSource(song) {
+            if (!song || !song.cover) return "assets/images/profile.jpg";
+            if (typeof song.cover === 'string' && song.cover.startsWith('blob:')) return "assets/images/profile.jpg";
+            return song.cover;
+        }
+
+        function sanitizeStoredSongs() {
+            let updated = false;
+            songs = songs.map(song => {
+                const copied = {...song};
+                if (typeof copied.file === 'string' && copied.file.startsWith('blob:')) {
+                    copied.file = "";
+                    updated = true;
+                }
+                if (typeof copied.cover === 'string' && copied.cover.startsWith('blob:')) {
+                    copied.cover = "assets/images/profile.jpg";
+                    updated = true;
+                }
+                return copied;
+            });
+            if (updated) {
+                saveSongsToLocalStorage();
+            }
+        }
+
+        async function initPlayer() {
+            enableVisitorMode();
+            await initGmtClock();
+            sanitizeStoredSongs();
+            await renderPlaylist();
+            if (songs.length > 0) {
+                await loadSong(currentSongIndex);
+            }
+            updateSliderBackground(progressBar);
+            updateSliderBackground(volumeBar);
+        }
+
+        async function renderPlaylist(filteredSongs = songs) {
+            playlistBlobUrls.forEach(revokeObjectUrl);
+            playlistBlobUrls = [];
+            playlistContainer.innerHTML = "";
+            totalSongsCount.innerText = `Total: ${songs.length} chansons`;
+            listenedCount.innerText = `Écoutées: ${listenedSongs.size}`;
+
+            for (const song of filteredSongs) {
+                const originalIndex = songs.indexOf(song);
+                const item = document.createElement("div");
+                item.className = `song-item ${originalIndex === currentSongIndex ? "active" : ""}`;
+                item.onclick = async () => {
+                    currentSongIndex = originalIndex;
+                    await loadSong(currentSongIndex);
+                    playSong();
+                };
+
+                const coverSrc = await resolveSongCoverSrc(song);
+                if (typeof coverSrc === 'string' && coverSrc.startsWith('blob:')) {
+                    playlistBlobUrls.push(coverSrc);
+                }
+                item.title = song.title || `Chanson ${originalIndex + 1}`;
+                item.innerHTML = `
+                    <img src="${coverSrc}" alt="Cover">
+                    <div class="song-info">
+                        <div class="title">${song.title}</div>
+                        <div class="artist">${song.artist}</div>
+                    </div>
+                `;
+                playlistContainer.appendChild(item);
+            }
+        }
+
+        async function loadSong(index) {
+            const song = songs[index];
+            const coverSrc = await resolveSongCoverSrc(song);
+            const audioSrc = await resolveSongAudioSrc(song);
+
+            revokeObjectUrl(currentAudioUrl);
+            revokeObjectUrl(currentCoverUrl);
+            currentAudioUrl = audioSrc && audioSrc.startsWith('blob:') ? audioSrc : "";
+            currentCoverUrl = coverSrc && coverSrc.startsWith('blob:') ? coverSrc : "";
+
+            songTitle.innerText = song.title;
+            artistName.innerText = song.artist;
+            albumCover.src = coverSrc;
+            bgBlur.style.backgroundImage = `url('${coverSrc}')`;
+            audio.src = audioSrc;
+            
+            let creditsText = `Paroles : ${song.author || 'Youssef Ait Lhaj'} | Compositeur : ${song.composer || 'Youssef Ait Lhaj'}`;
+            if(song.isReprise && song.originalArtist) {
+                creditsText += ` | Reprise de : ${song.originalArtist}`;
+            }
+            document.getElementById("songCreditsDetail").innerText = creditsText;
+            document.getElementById("playStatsCounter").innerText = `Nombre de lectures : ${song.plays || 0}`;
+            document.getElementById("fileNamesDetail").innerText = `Audio : ${song.audioFilename || 'N/A'}${song.coverFilename ? ' | Cover : ' + song.coverFilename : ''}`;
+            
+            if (song.favorite) {
+                favIcon.className = "fa-solid fa-heart";
+            } else {
+                favIcon.className = "fa-regular fa-heart";
+            }
+            await renderPlaylist();
+        }
+
+        function togglePlay() {
+            if (isPlaying) {
+                pauseSong();
+            } else {
+                playSong();
+            }
+        }
+
+        function playSong() {
+            isPlaying = true;
+            audio.play().catch(e => console.log("Audio play error:", e));
+            playIcon.className = "fa-solid fa-pause";
+            playBtn.classList.add("active");
+            visualizer.classList.add("playing");
+            
+            listenedSongs.add(currentSongIndex);
+            songs[currentSongIndex].plays = (songs[currentSongIndex].plays || 0) + 1;
+            document.getElementById("playStatsCounter").innerText = `Nombre de lectures : ${songs[currentSongIndex].plays}`;
+            listenedCount.innerText = `Écoutées: ${listenedSongs.size}`;
+            saveSongsToLocalStorage();
+        }
+
+        function pauseSong() {
+            isPlaying = false;
+            audio.pause();
+            playIcon.className = "fa-solid fa-play";
+            playBtn.classList.remove("active");
+            visualizer.classList.remove("playing");
+        }
+
+        function nextSong() {
+            if (isShuffle) {
+                currentSongIndex = Math.floor(Math.random() * songs.length);
+            } else {
+                currentSongIndex = (currentSongIndex + 1) % songs.length;
+            }
+            loadSong(currentSongIndex).then(() => {
+                if (isPlaying) playSong();
+            });
+        }
+
+        function prevSong() {
+            currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+            loadSong(currentSongIndex).then(() => {
+                if (isPlaying) playSong();
+            });
+        }
+
+        function toggleShuffle() {
+            isShuffle = !isShuffle;
+            document.getElementById("shuffleBtn").classList.toggle("active-mode", isShuffle);
+        }
+
+        function toggleRepeat() {
+            isRepeat = !isRepeat;
+            document.getElementById("repeatBtn").classList.toggle("active-mode", isRepeat);
+        }
+
+        function toggleFavorite() {
+            songs[currentSongIndex].favorite = !songs[currentSongIndex].favorite;
+            saveSongsToLocalStorage();
+            loadSong(currentSongIndex);
+        }
+
+        function toggleTheme() {
+            const body = document.getElementById("pageBody");
+            body.classList.toggle("light-theme");
+            const themeBtn = document.getElementById("themeBtn");
+            if (body.classList.contains("light-theme")) {
+                themeBtn.className = "fa-solid fa-sun theme-toggle";
+            } else {
+                themeBtn.className = "fa-solid fa-moon theme-toggle";
+            }
+        }
+
+        function switchPage(pageId) {
+            document.querySelectorAll('.page-view').forEach(view => view.classList.remove('active'));
+            document.querySelectorAll('.menu-tab-btn').forEach(btn => btn.classList.remove('active-tab-btn'));
+            
+            if (pageId === 'accueil') document.getElementById('accueilView').classList.add('active');
+            if (pageId === 'portfolio') document.getElementById('portfolioView').classList.add('active');
+            if (pageId === 'bio') document.getElementById('bioView').classList.add('active');
+            if (pageId === 'agenda') document.getElementById('agendaView').classList.add('active');
+            if (pageId === 'boutique') document.getElementById('boutiqueView').classList.add('active');
+            if (pageId === 'booking') document.getElementById('bookingView').classList.add('active');
+        }
+
+        function openAddSongModal() {
+            if (document.body.classList.contains('visitor-mode')) return;
+            document.getElementById("newSongTitleInput").value = "";
+            document.getElementById("audioFileInput").value = "";
+            document.getElementById("audioFileNameDisp").innerHTML = "Choisir le fichier audio...";
+            document.getElementById("coverFileInput").value = "";
+            document.getElementById("coverFileNameDisp").innerHTML = "Choisir l'image de couverture...";
+            document.getElementById("newSongArtistInput1").value = "Youssef Ait Lhaj";
+            document.getElementById("newSongArtistInput2").value = "";
+            document.getElementById("newSongArtistInput3").value = "";
+            document.getElementById("newSongAuthorInput").value = "Youssef Ait Lhaj";
+            document.getElementById("newSongComposerInput").value = "Youssef Ait Lhaj";
+            document.getElementById("isRepriseCheck").checked = false;
+            document.getElementById("originalArtistFieldNew").style.display = "none";
+            document.getElementById("newOriginalArtistInput").value = "";
+            document.getElementById("addSongModal").classList.add("active");
+        }
+        function closeAddSongModal() { document.getElementById("addSongModal").classList.remove("active"); }
+        
+        function getCleanTitleFromFilename(filename) {
+            return filename.replace(/\.[^/.]+$/, "").replace(/[_-]+/g, " ").trim();
+        }
+
+        function updateFileName(input, spanId) {
+            if(input.files && input.files[0]) {
+                const filename = input.files[0].name;
+                document.getElementById(spanId).innerHTML = `<i class="fa-solid fa-check" style="color:var(--accent);"></i> ${filename}`;
+                if (spanId === 'audioFileNameDisp') {
+                    const titleInput = document.getElementById('newSongTitleInput');
+                    if (!titleInput.value.trim()) {
+                        titleInput.value = getCleanTitleFromFilename(filename);
+                    }
+                }
+            }
+        }
+
+        function toggleOriginalArtistField(type) {
+            if(type === 'new') {
+                let isChecked = document.getElementById("isRepriseCheck").checked;
+                document.getElementById("originalArtistFieldNew").style.display = isChecked ? "block" : "none";
+            } else {
+                let isChecked = document.getElementById("editIsRepriseCheck").checked;
+                document.getElementById("originalArtistFieldEdit").style.display = isChecked ? "block" : "none";
+            }
+        }
+
+        function convertFileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        async function saveNewSong() {
+            if (isVisitorMode()) return;
+            const titleInput = document.getElementById("newSongTitleInput");
+            let title = titleInput.value.trim();
+            const artistParts = [
+                document.getElementById("newSongArtistInput1").value.trim(),
+                document.getElementById("newSongArtistInput2").value.trim(),
+                document.getElementById("newSongArtistInput3").value.trim()
+            ].filter(part => part);
+            let artist = artistParts.join(" - ");
+            let author = document.getElementById("newSongAuthorInput").value.trim();
+            let composer = document.getElementById("newSongComposerInput").value.trim();
+            let isReprise = document.getElementById("isRepriseCheck").checked;
+            let originalArtist = document.getElementById("newOriginalArtistInput").value.trim();
+            
+            let audioInput = document.getElementById("audioFileInput");
+            let coverInput = document.getElementById("coverFileInput");
+
+            if (!audioInput || !audioInput.files || !audioInput.files[0]) {
+                alert("Veuillez choisir un fichier audio pour enregistrer la chanson.");
+                return;
+            }
+
+            if (!title) {
+                title = getCleanTitleFromFilename(audioInput.files[0].name);
+                titleInput.value = title;
+            }
+
+            if (!title) {
+                alert("Veuillez entrer le titre de la chanson.");
+                return;
+            }
+
+            if (!artist) {
+                artist = "Youssef Ait Lhaj - dihya";
+            }
+
+            if (!audioInput || !audioInput.files || !audioInput.files[0]) {
+                alert("Veuillez choisir un fichier audio pour enregistrer la chanson.");
+                return;
+            }
+
+            let audioBlobId;
+            try {
+                audioBlobId = `audio-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+                await saveBlob(audioBlobId, audioInput.files[0]);
+            } catch (error) {
+                console.error("Erreur de sauvegarde du fichier audio :", error);
+                alert("Impossible de sauvegarder le fichier audio. Veuillez réessayer.");
+                return;
+            }
+
+            let coverPath = "assets/images/profile.jpg";
+            let coverBlobId;
+            let audioFilename = audioInput.files[0].name;
+            let coverFilename = "";
+            if (coverInput && coverInput.files && coverInput.files[0]) {
+                try {
+                    coverBlobId = `cover-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+                    coverFilename = coverInput.files[0].name;
+                    await saveBlob(coverBlobId, coverInput.files[0]);
+                } catch (error) {
+                    console.error("Erreur de sauvegarde de l'image de couverture :", error);
+                    alert("Impossible de sauvegarder l'image de couverture. La couverture par défaut sera utilisée.");
+                }
+            }
+
+            songs.push({
+                title: title,
+                artist: artist,
+                file: "",
+                audioFilename: audioFilename,
+                coverFilename: coverFilename,
+                cover: coverPath,
+                audioBlobId: audioBlobId,
+                coverBlobId: coverBlobId,
+                author: author || "Youssef Ait Lhaj",
+                composer: composer || "Youssef Ait Lhaj",
+                isReprise: isReprise,
+                originalArtist: isReprise ? originalArtist : "",
+                plays: 0,
+                favorite: false,
+                lyrics: []
+            });
+
+            currentSongIndex = songs.length - 1;
+            saveSongsToLocalStorage();
+            await renderPlaylist();
+            await loadSong(currentSongIndex);
+            closeAddSongModal();
+            alert("Chanson ajoutée et enregistrée avec succès !");
+        }
+
+        function openEditSongModal() {
+            if (document.body.classList.contains('visitor-mode')) return;
+            let song = songs[currentSongIndex];
+            document.getElementById("editSongTitleInput").value = song.title;
+            document.getElementById("editArtistNameInput").value = song.artist; // تعبئة اسم المغني الحالي
+            document.getElementById("editSongAuthorInput").value = song.author || "Youssef Ait Lhaj";
+            document.getElementById("editSongComposerInput").value = song.composer || "Youssef Ait Lhaj";
+            
+            let isReprise = song.isReprise || false;
+            document.getElementById("editIsRepriseCheck").checked = isReprise;
+            document.getElementById("editOriginalArtistInput").value = song.originalArtist || "";
+            document.getElementById("originalArtistFieldEdit").style.display = isReprise ? "block" : "none";
+            
+            document.getElementById("editAudioFileNameDisp").innerHTML = `<i class="fa-solid fa-check" style="color:var(--accent);"></i> Fichier actuel conservé`;
+            document.getElementById("editCoverFileNameDisp").innerHTML = `<i class="fa-solid fa-check" style="color:var(--accent);"></i> Image actuelle conservée`;
+
+            document.getElementById("editSongModal").classList.add("active");
+        }
+        function closeEditSongModal() {
+            document.getElementById("editSongModal").classList.remove("active");
+        }
+        
+        async function saveEditedSong() {
+            if (isVisitorMode()) return;
+            let newTitle = document.getElementById("editSongTitleInput").value;
+            let newArtist = document.getElementById("editArtistNameInput").value; // أخذ اسم المغني المعدل
+            let newAuthor = document.getElementById("editSongAuthorInput").value;
+            let newComposer = document.getElementById("editSongComposerInput").value;
+            let isReprise = document.getElementById("editIsRepriseCheck").checked;
+            let originalArtist = document.getElementById("editOriginalArtistInput").value;
+
+            let editAudioInput = document.getElementById("editAudioFileInput");
+            let editCoverInput = document.getElementById("editCoverFileInput");
+
+            if(newTitle) {
+                songs[currentSongIndex].title = newTitle;
+                songs[currentSongIndex].artist = newArtist || "Youssef Ait Lhaj - dihya"; // تحديث اسم المغني
+                songs[currentSongIndex].author = newAuthor;
+                songs[currentSongIndex].composer = newComposer;
+                songs[currentSongIndex].isReprise = isReprise;
+                songs[currentSongIndex].originalArtist = isReprise ? originalArtist : "";
+
+                if (editAudioInput.files && editAudioInput.files[0]) {
+                    const audioBlobId = `audio-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+                    await saveBlob(audioBlobId, editAudioInput.files[0]);
+                    songs[currentSongIndex].audioBlobId = audioBlobId;
+                    songs[currentSongIndex].file = "";
+                    songs[currentSongIndex].audioFilename = editAudioInput.files[0].name;
+                }
+
+                if (editCoverInput.files && editCoverInput.files[0]) {
+                    const coverBlobId = `cover-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+                    await saveBlob(coverBlobId, editCoverInput.files[0]);
+                    songs[currentSongIndex].coverBlobId = coverBlobId;
+                    songs[currentSongIndex].cover = "assets/images/profile.jpg";
+                    songs[currentSongIndex].coverFilename = editCoverInput.files[0].name;
+                }
+                
+                saveSongsToLocalStorage();
+                await loadSong(currentSongIndex);
+                closeEditSongModal();
+                alert("تم تحديث معلومات الأغنية والمغني بنجاح وثبات كامل!");
+            } else {
+                alert("المرجو إدخال عنوان الأغنية.");
+            }
+        }
+
+        function openEditLyricsTextModal() {
+            if (isVisitorMode()) return;
+            let song = songs[currentSongIndex];
+            let textStr = song.lyrics ? song.lyrics.map(l => l.text).join("\n") : "";
+            document.getElementById("lyricsTextInput").value = textStr;
+            document.getElementById("editLyricsModal").classList.add("active");
+        }
+        function closeEditLyricsTextModal() { document.getElementById("editLyricsModal").classList.remove("active"); }
+
+        function saveLyricsText() {
+            if (isVisitorMode()) return;
+            let textStr = document.getElementById("lyricsTextInput").value;
+            let lines = textStr.split("\n").filter(l => l.trim() !== "");
+            songs[currentSongIndex].lyrics = lines.map(l => ({ text: l, time: 0 }));
+            saveSongsToLocalStorage();
+            closeEditLyricsTextModal();
+            alert("Mots enregistrés avec succès !");
+        }
+
+        function openLyricsModal() {
+            let song = songs[currentSongIndex];
+            let area = document.getElementById("lyricsDisplayArea");
+            if(song.lyrics && song.lyrics.length > 0) {
+                area.innerHTML = song.lyrics.map(l => `<div>${l.text}</div>`).join("");
+            } else {
+                area.innerHTML = "لا توجد كلمات مسجلة لهذه الأغنية بعد. قم بإضافة الكلمات أولاً.";
+            }
+            document.getElementById("lyricsViewerModal").classList.add("active");
+        }
+
+        function openSyncModal() {
+            if (isVisitorMode()) return;
+            let song = songs[currentSongIndex];
+            if(!song.lyrics || song.lyrics.length === 0) {
+                alert("المرجو إضافة كلمات الأغنية أولاً عبر زر (كتابة/لصق الكلمات)!");
+                return;
+            }
+            syncCurrentLineIndex = 0;
+            renderSyncLines();
+            document.getElementById("syncModal").classList.add("active");
+        }
+        function closeSyncModal() {
+            document.getElementById("syncModal").classList.remove("active");
+            audio.pause();
+        }
+
+        function renderSyncLines() {
+            let container = document.getElementById("syncLinesContainer");
+            let song = songs[currentSongIndex];
+            container.innerHTML = "";
+            song.lyrics.forEach((item, idx) => {
+                let div = document.createElement("div");
+                div.className = `sync-line-item ${idx === syncCurrentLineIndex ? "current-sync" : ""}`;
+                div.innerHTML = `
+                    <span>${item.text}</span>
+                    <span class="sync-time-badge">${item.time ? item.time.toFixed(2) + 's' : '--:--'}</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function toggleSyncPlayAudio() {
+            if(audio.paused) {
+                audio.play();
+                document.getElementById("syncPlayBtn").innerHTML = `<i class="fa-solid fa-pause"></i> إيقاف مؤقت`;
+            } else {
+                audio.pause();
+                document.getElementById("syncPlayBtn").innerHTML = `<i class="fa-solid fa-play"></i> تشغيل`;
+            }
+        }
+
+        window.addEventListener("keydown", (e) => {
+            if(e.code === "Space" && document.getElementById("syncModal").classList.contains("active")) {
+                e.preventDefault();
+                let song = songs[currentSongIndex];
+                if(song.lyrics && syncCurrentLineIndex < song.lyrics.length) {
+                    song.lyrics[syncCurrentLineIndex].time = audio.currentTime;
+                    syncCurrentLineIndex++;
+                    saveSongsToLocalStorage();
+                    renderSyncLines();
+                }
+            }
+        });
+
+        audio.ontimeupdate = () => {
+            if (audio.duration) {
+                progressBar.value = (audio.currentTime / audio.duration) * 100;
+                updateSliderBackground(progressBar);
+                
+                let m = Math.floor(audio.currentTime / 60);
+                let s = Math.floor(audio.currentTime % 60);
+                currentTimeEl.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+                
+                let dm = Math.floor(audio.duration / 60);
+                let ds = Math.floor(audio.duration % 60);
+                durationEl.innerText = `${dm}:${ds < 10 ? '0' : ''}${ds}`;
+
+                let syncTimeEl = document.getElementById("syncCurrentAudioTime");
+                if(syncTimeEl) {
+                    syncTimeEl.innerText = `${m}:${s < 10 ? '0' : ''}${s} (${audio.currentTime.toFixed(2)}s)`;
+                }
+            }
+        };
+
+        function saveSyncedLyrics() {
+            saveSongsToLocalStorage();
+            closeSyncModal();
+            alert("تم حفظ توقيتات المزامنة بنجاح عبر Space!");
+        }
+
+        audio.onended = () => {
+            if (isRepeat) {
+                audio.play();
+            } else {
+                nextSong();
+            }
+        };
+
+        progressBar.oninput = () => {
+            if(audio.duration) {
+                audio.currentTime = (progressBar.value / 100) * audio.duration;
+                updateSliderBackground(progressBar);
+            }
+        };
+
+        function changeVolume() { 
+            audio.volume = volumeBar.value / 100; 
+            updateSliderBackground(volumeBar);
+        }
+        
+        function changeSpeed() { audio.playbackRate = parseFloat(document.getElementById("speedSelector").value); }
+
+        function filterPlaylist() {
+            const query = document.getElementById("searchInput").value.toLowerCase();
+            const filtered = songs.filter(s => s.title.toLowerCase().includes(query) || s.artist.toLowerCase().includes(query));
+            renderPlaylist(filtered);
+        }
+
+        async function deleteCurrentSong() {
+            if (document.body.classList.contains('visitor-mode')) return;
+            if (confirm("Voulez-vous vraiment supprimer cette chanson de la liste ?")) {
+                const song = songs[currentSongIndex];
+                try {
+                    if (song?.audioBlobId) await deleteBlob(song.audioBlobId);
+                    if (song?.coverBlobId) await deleteBlob(song.coverBlobId);
+                } catch (error) {
+                    console.warn("Erreur lors de la suppression des fichiers liés :", error);
+                }
+
+                songs.splice(currentSongIndex, 1);
+                saveSongsToLocalStorage();
+                if (songs.length > 0) {
+                    currentSongIndex = Math.min(currentSongIndex, songs.length - 1);
+                    await loadSong(currentSongIndex);
+                } else {
+                    playlistContainer.innerHTML = "";
+                    songTitle.innerText = "Aucune chanson";
+                    artistName.innerText = "";
+                    albumCover.src = "assets/images/profile.jpg";
+                    bgBlur.style.backgroundImage = "none";
+                    audio.src = "";
+                    document.getElementById("songCreditsDetail").innerText = "";
+                    document.getElementById("playStatsCounter").innerText = "Nombre de lectures : 0";
+                    document.getElementById("fileNamesDetail").innerText = "";
+                    renderPlaylist();
+                }
+            }
+        }
+
+        function shareSong() {
+            navigator.clipboard.writeText(window.location.href);
+            alert("Lien de la chanson copié dans le presse-papier !");
+        }
+
+        function setBioLang(lang) {
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active-lang'));
+            event.target.classList.add('active-lang');
+            
+            const bioText = document.getElementById("bioText");
+            const bioSubtitle = document.getElementById("bioSubtitle");
+            
+            if(lang === 'fr') {
+                bioSubtitle.innerText = "Artiste, Auteur & Musicien - Amazigh";
+                bioText.innerText = "Youssef Ait Lhaj est un éminent artiste, auteur et musicien amazigh originaire de la ville d'Itzer, dans la province de Midelt, au cœur du Moyen Atlas...";
+            } else if(lang === 'ar') {
+                bioSubtitle.innerText = "فنان، مؤلف وموسيقي - أزيغ";
+                bioText.innerText = "يوسف أيت الحاج هو فنان ومؤلف وموسيقي أزيغ بارز من مدينة أيتزر، إقليم ميدلت، في قلب المتوسط...";
+            } else if(lang === 'en') {
+                bioSubtitle.innerText = "Artist, Author & Musician - Amazigh";
+                bioText.innerText = "Youssef Ait Lhaj is a prominent Amazigh artist, author, and musician originally from the town of Itzer, Midelt province, in the heart of the Middle Atlas...";
+            }
+        }
+
+        window.onload = initPlayer;
+    </script>
+</body>
+</html>
