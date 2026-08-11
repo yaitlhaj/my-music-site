@@ -68,18 +68,6 @@
             align-items: center;
             gap: 8px;
         }
-        .public-link {
-            color: var(--text-sub);
-            text-decoration: none;
-            font-size: 0.78rem;
-            padding: 6px 8px;
-            border-radius: 999px;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-        .public-link:hover {
-            color: var(--accent);
-        }
         .sidebar-clock {
             font-size: 0.8rem;
             color: var(--text-sub);
@@ -397,7 +385,6 @@
                 <h3>Youssef Ait Lhaj</h3>
             </div>
             <div class="nav-links-top">
-                <a class="public-link" href="public.html" target="_blank"><i class="fa-solid fa-eye"></i> Vue publique</a>
                 <div class="sidebar-clock" id="liveClock"><i class="fa-solid fa-clock"></i> <span id="clockTime">--:--</span></div>
                 <i class="fa-solid fa-moon theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Mode clair / sombre"></i>
             </div>
@@ -416,8 +403,6 @@
             <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" id="searchInput" placeholder="Rechercher une chanson..." oninput="filterPlaylist()">
         </div>
-
-        <button class="add-song-btn" onclick="openAddSongModal()"><i class="fa-solid fa-plus"></i> Ajouter une nouvelle chanson</button>
 
         <div class="playlist-stats">
             <span id="totalSongsCount">Total: 0 chansons</span>
@@ -474,10 +459,6 @@
 
             <div class="action-row-buttons">
                 <button class="action-btn" onclick="openLyricsModal()"><i class="fa-solid fa-align-left"></i> Paroles & Crédits</button>
-                <button class="action-btn" onclick="openSyncModal()"><i class="fa-solid fa-microphone"></i> المزامنة التلقائية (Space)</button>
-                <button class="action-btn" onclick="openEditLyricsTextModal()"><i class="fa-solid fa-pen-to-square"></i> كتابة/لصق الكلمات</button>
-                <button class="action-btn" onclick="openEditSongModal()"><i class="fa-solid fa-pen"></i> Modifier</button>
-                <button class="action-btn delete" onclick="deleteCurrentSong()"><i class="fa-solid fa-trash"></i> Supprimer</button>
             </div>
 
             <div class="action-row-buttons">
@@ -568,139 +549,6 @@
             </div>
         </div>
 
-    </div>
-
-    <!-- Modals Popup -->
-    <div class="modal-overlay" id="addSongModal">
-        <div class="modal-box">
-            <h2><i class="fa-solid fa-compact-disc"></i> Ajouter une nouvelle chanson</h2>
-            <div class="modal-field">
-                <label>Titre de la chanson :</label>
-                <input type="text" id="newSongTitleInput" placeholder="Ex: Titre de la chanson">
-            </div>
-            <div class="modal-field">
-                <label>Artistes (jusqu'à 3) :</label>
-                <input type="text" id="newSongArtistInput1" placeholder="Artiste principal" style="margin-bottom: 8px;">
-                <input type="text" id="newSongArtistInput2" placeholder="Artiste invité 1 (facultatif)" style="margin-bottom: 8px;">
-                <input type="text" id="newSongArtistInput3" placeholder="Artiste invité 2 (facultatif)">
-            </div>
-            <div class="modal-field">
-                <label>Fichier audio (MP3 / Audio) :</label>
-                <div class="file-input-fake" onclick="document.getElementById('audioFileInput').click()">
-                    <i class="fa-solid fa-music"></i> <span id="audioFileNameDisp">Choisir le fichier audio...</span>
-                </div>
-                <input type="file" id="audioFileInput" accept="audio/*" style="display:none" onchange="updateFileName(this, 'audioFileNameDisp')">
-            </div>
-            <div class="modal-field">
-                <label>Image de couverture (Cover) :</label>
-                <div class="file-input-fake" onclick="document.getElementById('coverFileInput').click()">
-                    <i class="fa-solid fa-image"></i> <span id="coverFileNameDisp">Choisir l'image de couverture...</span>
-                </div>
-                <input type="file" id="coverFileInput" accept="image/*" style="display:none" onchange="updateFileName(this, 'coverFileNameDisp')">
-            </div>
-            <div class="modal-field">
-                <label>Auteur (Paroles) :</label>
-                <input type="text" id="newSongAuthorInput" placeholder="Ex: Youssef Ait Lhaj" value="Youssef Ait Lhaj">
-            </div>
-            <div class="modal-field">
-                <label>Compositeur :</label>
-                <input type="text" id="newSongComposerInput" placeholder="Ex: Youssef Ait Lhaj" value="Youssef Ait Lhaj">
-            </div>
-            <div class="modal-field" style="display: flex; align-items: center; gap: 8px;">
-                <input type="checkbox" id="isRepriseCheck" style="width: 16px; height: 16px; cursor: pointer;" onchange="toggleOriginalArtistField('new')">
-                <label for="isRepriseCheck" style="margin: 0; cursor: pointer;">C'est une reprise (Cover) ?</label>
-            </div>
-            <div class="modal-field" id="originalArtistFieldNew" style="display: none;">
-                <label>Artiste d'origine (Original Artist) :</label>
-                <input type="text" id="newOriginalArtistInput" placeholder="Ex: Rouicha Mohamed">
-            </div>
-            <div class="modal-actions">
-                <button type="button" class="modal-btn save" onclick="saveNewSong()"><i class="fa-solid fa-check"></i> Enregistrer</button>
-                <button type="button" class="modal-btn cancel" onclick="closeAddSongModal()">Annuler</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- نافذة تعديل الأغنية (تتضمن الآن تعديل اسم المغني) -->
-    <div class="modal-overlay" id="editSongModal">
-        <div class="modal-box">
-            <h2><i class="fa-solid fa-pen"></i> Modifier la chanson</h2>
-            <div class="modal-field">
-                <label>Titre de la chanson :</label>
-                <input type="text" id="editSongTitleInput">
-            </div>
-            <div class="modal-field">
-                <label>Nom de l'artiste / Chanteur :</label>
-                <input type="text" id="editArtistNameInput" placeholder="Ex: Youssef Ait Lhaj - Dihya">
-            </div>
-            <div class="modal-field">
-                <label>Changer le fichier audio (MP3) :</label>
-                <div class="file-input-fake" onclick="document.getElementById('editAudioFileInput').click()">
-                    <i class="fa-solid fa-music"></i> <span id="editAudioFileNameDisp"><i class="fa-solid fa-check" style="color:var(--accent);"></i> Fichier actuel conservé</span>
-                </div>
-                <input type="file" id="editAudioFileInput" accept="audio/*" style="display:none" onchange="updateFileName(this, 'editAudioFileNameDisp')">
-            </div>
-            <div class="modal-field">
-                <label>Changer l'image de couverture (Cover) :</label>
-                <div class="file-input-fake" onclick="document.getElementById('editCoverFileInput').click()">
-                    <i class="fa-solid fa-image"></i> <span id="editCoverFileNameDisp"><i class="fa-solid fa-check" style="color:var(--accent);"></i> Image actuelle conservée</span>
-                </div>
-                <input type="file" id="editCoverFileInput" accept="image/*" style="display:none" onchange="updateFileName(this, 'editCoverFileNameDisp')">
-            </div>
-            <div class="modal-field">
-                <label>Auteur (Paroles) :</label>
-                <input type="text" id="editSongAuthorInput">
-            </div>
-            <div class="modal-field">
-                <label>Compositeur :</label>
-                <input type="text" id="editSongComposerInput">
-            </div>
-            <div class="modal-field" style="display: flex; align-items: center; gap: 8px;">
-                <input type="checkbox" id="editIsRepriseCheck" style="width: 16px; height: 16px; cursor: pointer;" onchange="toggleOriginalArtistField('edit')">
-                <label for="editIsRepriseCheck" style="margin: 0; cursor: pointer;">C'est une reprise (Cover) ?</label>
-            </div>
-            <div class="modal-field" id="originalArtistFieldEdit" style="display: none;">
-                <label>Artiste d'origine (Original Artist) :</label>
-                <input type="text" id="editOriginalArtistInput" placeholder="Ex: Rouicha Mohamed">
-            </div>
-            <div class="modal-actions">
-                <button class="modal-btn save" onclick="saveEditedSong()"><i class="fa-solid fa-check"></i> Enregistrer les modifications</button>
-                <button class="modal-btn cancel" onclick="closeEditSongModal()">Annuler</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="editLyricsModal">
-        <div class="modal-box">
-            <h2><i class="fa-solid fa-pen-to-square"></i> كتابة أو لصق كلمات الأغنية</h2>
-            <p style="color: var(--text-sub); font-size: 0.82rem; margin-top: -5px;">اكتب كل سطر في صف مستقل.</p>
-            <div class="modal-field">
-                <textarea id="lyricsTextInput" style="height: 180px; resize: vertical;" placeholder="السطر الأول&#10;السطر الثاني&#10;...السطر الثالث"></textarea>
-            </div>
-            <div class="modal-actions">
-                <button class="modal-btn save" onclick="saveLyricsText()"><i class="fa-solid fa-check"></i> حفظ الكلمات</button>
-                <button class="modal-btn cancel" onclick="closeEditLyricsTextModal()">إلغاء</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="syncModal">
-        <div class="modal-box" style="width: 600px;">
-            <h2><i class="fa-solid fa-microphone"></i> المزامنة التلقائية (اضغط Space لتسجيل الوقت)</h2>
-            <p style="color: var(--text-sub); font-size: 0.82rem; margin-top: -5px;">قم بتشغيل الأغنية، ومع كل سطر يغنيه الفنان اضغط على مفتاح <b>Space</b> في لوحة المفاتيح لتسجيل التوقيت بدقة!</p>
-            
-            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; margin-bottom: 10px;">
-                <span id="syncCurrentAudioTime" style="font-family: monospace; color: var(--accent); font-weight: bold; font-size: 1rem;">00:00</span>
-                <button class="action-btn" onclick="toggleSyncPlayAudio()" id="syncPlayBtn"><i class="fa-solid fa-play"></i> تشغيل / إيقاف الأغنية</button>
-            </div>
-
-            <div class="sync-lines-container" id="syncLinesContainer"></div>
-
-            <div class="modal-actions">
-                <button class="modal-btn save" onclick="saveSyncedLyrics()"><i class="fa-solid fa-check"></i> حفظ التوقيتات</button>
-                <button class="modal-btn cancel" onclick="closeSyncModal()">إغلاق</button>
-            </div>
-        </div>
     </div>
 
     <div class="modal-overlay" id="lyricsViewerModal">
@@ -1120,297 +968,16 @@
             if (pageId === 'booking') document.getElementById('bookingView').classList.add('active');
         }
 
-        function openAddSongModal() {
-            document.getElementById("newSongTitleInput").value = "";
-            document.getElementById("audioFileInput").value = "";
-            document.getElementById("audioFileNameDisp").innerHTML = "Choisir le fichier audio...";
-            document.getElementById("coverFileInput").value = "";
-            document.getElementById("coverFileNameDisp").innerHTML = "Choisir l'image de couverture...";
-            document.getElementById("newSongArtistInput1").value = "Youssef Ait Lhaj";
-            document.getElementById("newSongArtistInput2").value = "";
-            document.getElementById("newSongArtistInput3").value = "";
-            document.getElementById("newSongAuthorInput").value = "Youssef Ait Lhaj";
-            document.getElementById("newSongComposerInput").value = "Youssef Ait Lhaj";
-            document.getElementById("isRepriseCheck").checked = false;
-            document.getElementById("originalArtistFieldNew").style.display = "none";
-            document.getElementById("newOriginalArtistInput").value = "";
-            document.getElementById("addSongModal").classList.add("active");
-        }
-        function closeAddSongModal() { document.getElementById("addSongModal").classList.remove("active"); }
-        
-        function getCleanTitleFromFilename(filename) {
-            return filename.replace(/\.[^/.]+$/, "").replace(/[_-]+/g, " ").trim();
-        }
-
-        function updateFileName(input, spanId) {
-            if(input.files && input.files[0]) {
-                const filename = input.files[0].name;
-                document.getElementById(spanId).innerHTML = `<i class="fa-solid fa-check" style="color:var(--accent);"></i> ${filename}`;
-                if (spanId === 'audioFileNameDisp') {
-                    const titleInput = document.getElementById('newSongTitleInput');
-                    if (!titleInput.value.trim()) {
-                        titleInput.value = getCleanTitleFromFilename(filename);
-                    }
-                }
-            }
-        }
-
-        function toggleOriginalArtistField(type) {
-            if(type === 'new') {
-                let isChecked = document.getElementById("isRepriseCheck").checked;
-                document.getElementById("originalArtistFieldNew").style.display = isChecked ? "block" : "none";
-            } else {
-                let isChecked = document.getElementById("editIsRepriseCheck").checked;
-                document.getElementById("originalArtistFieldEdit").style.display = isChecked ? "block" : "none";
-            }
-        }
-
-        function convertFileToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
-            });
-        }
-
-        async function saveNewSong() {
-            const titleInput = document.getElementById("newSongTitleInput");
-            let title = titleInput.value.trim();
-            const artistParts = [
-                document.getElementById("newSongArtistInput1").value.trim(),
-                document.getElementById("newSongArtistInput2").value.trim(),
-                document.getElementById("newSongArtistInput3").value.trim()
-            ].filter(part => part);
-            let artist = artistParts.join(" - ");
-            let author = document.getElementById("newSongAuthorInput").value.trim();
-            let composer = document.getElementById("newSongComposerInput").value.trim();
-            let isReprise = document.getElementById("isRepriseCheck").checked;
-            let originalArtist = document.getElementById("newOriginalArtistInput").value.trim();
-            
-            let audioInput = document.getElementById("audioFileInput");
-            let coverInput = document.getElementById("coverFileInput");
-
-            if (!audioInput || !audioInput.files || !audioInput.files[0]) {
-                alert("Veuillez choisir un fichier audio pour enregistrer la chanson.");
-                return;
-            }
-
-            if (!title) {
-                title = getCleanTitleFromFilename(audioInput.files[0].name);
-                titleInput.value = title;
-            }
-
-            if (!title) {
-                alert("Veuillez entrer le titre de la chanson.");
-                return;
-            }
-
-            if (!artist) {
-                artist = "Youssef Ait Lhaj - dihya";
-            }
-
-            if (!audioInput || !audioInput.files || !audioInput.files[0]) {
-                alert("Veuillez choisir un fichier audio pour enregistrer la chanson.");
-                return;
-            }
-
-            let audioBlobId;
-            try {
-                audioBlobId = `audio-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-                await saveBlob(audioBlobId, audioInput.files[0]);
-            } catch (error) {
-                console.error("Erreur de sauvegarde du fichier audio :", error);
-                alert("Impossible de sauvegarder le fichier audio. Veuillez réessayer.");
-                return;
-            }
-
-            let coverPath = "assets/images/profile.jpg";
-            let coverBlobId;
-            let audioFilename = audioInput.files[0].name;
-            let coverFilename = "";
-            if (coverInput && coverInput.files && coverInput.files[0]) {
-                try {
-                    coverBlobId = `cover-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-                    coverFilename = coverInput.files[0].name;
-                    await saveBlob(coverBlobId, coverInput.files[0]);
-                } catch (error) {
-                    console.error("Erreur de sauvegarde de l'image de couverture :", error);
-                    alert("Impossible de sauvegarder l'image de couverture. La couverture par défaut sera utilisée.");
-                }
-            }
-
-            songs.push({
-                title: title,
-                artist: artist,
-                file: "",
-                audioFilename: audioFilename,
-                coverFilename: coverFilename,
-                cover: coverPath,
-                audioBlobId: audioBlobId,
-                coverBlobId: coverBlobId,
-                author: author || "Youssef Ait Lhaj",
-                composer: composer || "Youssef Ait Lhaj",
-                isReprise: isReprise,
-                originalArtist: isReprise ? originalArtist : "",
-                plays: 0,
-                favorite: false,
-                lyrics: []
-            });
-
-            currentSongIndex = songs.length - 1;
-            saveSongsToLocalStorage();
-            await renderPlaylist();
-            await loadSong(currentSongIndex);
-            closeAddSongModal();
-            alert("Chanson ajoutée et enregistrée avec succès !");
-        }
-
-        function openEditSongModal() {
-            let song = songs[currentSongIndex];
-            document.getElementById("editSongTitleInput").value = song.title;
-            document.getElementById("editArtistNameInput").value = song.artist; // تعبئة اسم المغني الحالي
-            document.getElementById("editSongAuthorInput").value = song.author || "Youssef Ait Lhaj";
-            document.getElementById("editSongComposerInput").value = song.composer || "Youssef Ait Lhaj";
-            
-            let isReprise = song.isReprise || false;
-            document.getElementById("editIsRepriseCheck").checked = isReprise;
-            document.getElementById("editOriginalArtistInput").value = song.originalArtist || "";
-            document.getElementById("originalArtistFieldEdit").style.display = isReprise ? "block" : "none";
-            
-            document.getElementById("editAudioFileNameDisp").innerHTML = `<i class="fa-solid fa-check" style="color:var(--accent);"></i> Fichier actuel conservé`;
-            document.getElementById("editCoverFileNameDisp").innerHTML = `<i class="fa-solid fa-check" style="color:var(--accent);"></i> Image actuelle conservée`;
-
-            document.getElementById("editSongModal").classList.add("active");
-        }
-        function closeEditSongModal() {
-            document.getElementById("editSongModal").classList.remove("active");
-        }
-        
-        async function saveEditedSong() {
-            let newTitle = document.getElementById("editSongTitleInput").value;
-            let newArtist = document.getElementById("editArtistNameInput").value; // أخذ اسم المغني المعدل
-            let newAuthor = document.getElementById("editSongAuthorInput").value;
-            let newComposer = document.getElementById("editSongComposerInput").value;
-            let isReprise = document.getElementById("editIsRepriseCheck").checked;
-            let originalArtist = document.getElementById("editOriginalArtistInput").value;
-
-            let editAudioInput = document.getElementById("editAudioFileInput");
-            let editCoverInput = document.getElementById("editCoverFileInput");
-
-            if(newTitle) {
-                songs[currentSongIndex].title = newTitle;
-                songs[currentSongIndex].artist = newArtist || "Youssef Ait Lhaj - dihya"; // تحديث اسم المغني
-                songs[currentSongIndex].author = newAuthor;
-                songs[currentSongIndex].composer = newComposer;
-                songs[currentSongIndex].isReprise = isReprise;
-                songs[currentSongIndex].originalArtist = isReprise ? originalArtist : "";
-
-                if (editAudioInput.files && editAudioInput.files[0]) {
-                    const audioBlobId = `audio-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-                    await saveBlob(audioBlobId, editAudioInput.files[0]);
-                    songs[currentSongIndex].audioBlobId = audioBlobId;
-                    songs[currentSongIndex].file = "";
-                    songs[currentSongIndex].audioFilename = editAudioInput.files[0].name;
-                }
-
-                if (editCoverInput.files && editCoverInput.files[0]) {
-                    const coverBlobId = `cover-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-                    await saveBlob(coverBlobId, editCoverInput.files[0]);
-                    songs[currentSongIndex].coverBlobId = coverBlobId;
-                    songs[currentSongIndex].cover = "assets/images/profile.jpg";
-                    songs[currentSongIndex].coverFilename = editCoverInput.files[0].name;
-                }
-                
-                saveSongsToLocalStorage();
-                await loadSong(currentSongIndex);
-                closeEditSongModal();
-                alert("تم تحديث معلومات الأغنية والمغني بنجاح وثبات كامل!");
-            } else {
-                alert("المرجو إدخال عنوان الأغنية.");
-            }
-        }
-
-        function openEditLyricsTextModal() {
-            let song = songs[currentSongIndex];
-            let textStr = song.lyrics ? song.lyrics.map(l => l.text).join("\n") : "";
-            document.getElementById("lyricsTextInput").value = textStr;
-            document.getElementById("editLyricsModal").classList.add("active");
-        }
-        function closeEditLyricsTextModal() { document.getElementById("editLyricsModal").classList.remove("active"); }
-
-        function saveLyricsText() {
-            let textStr = document.getElementById("lyricsTextInput").value;
-            let lines = textStr.split("\n").filter(l => l.trim() !== "");
-            songs[currentSongIndex].lyrics = lines.map(l => ({ text: l, time: 0 }));
-            saveSongsToLocalStorage();
-            closeEditLyricsTextModal();
-            alert("Mots enregistrés avec succès !");
-        }
-
         function openLyricsModal() {
             let song = songs[currentSongIndex];
             let area = document.getElementById("lyricsDisplayArea");
             if(song.lyrics && song.lyrics.length > 0) {
                 area.innerHTML = song.lyrics.map(l => `<div>${l.text}</div>`).join("");
             } else {
-                area.innerHTML = "لا توجد كلمات مسجلة لهذه الأغنية بعد. قم بإضافة الكلمات أولاً.";
+                area.innerHTML = "لا توجد كلمات مسجلة لهذه الأغنية بعد.";
             }
             document.getElementById("lyricsViewerModal").classList.add("active");
         }
-
-        function openSyncModal() {
-            let song = songs[currentSongIndex];
-            if(!song.lyrics || song.lyrics.length === 0) {
-                alert("المرجو إضافة كلمات الأغنية أولاً عبر زر (كتابة/لصق الكلمات)!");
-                return;
-            }
-            syncCurrentLineIndex = 0;
-            renderSyncLines();
-            document.getElementById("syncModal").classList.add("active");
-        }
-        function closeSyncModal() {
-            document.getElementById("syncModal").classList.remove("active");
-            audio.pause();
-        }
-
-        function renderSyncLines() {
-            let container = document.getElementById("syncLinesContainer");
-            let song = songs[currentSongIndex];
-            container.innerHTML = "";
-            song.lyrics.forEach((item, idx) => {
-                let div = document.createElement("div");
-                div.className = `sync-line-item ${idx === syncCurrentLineIndex ? "current-sync" : ""}`;
-                div.innerHTML = `
-                    <span>${item.text}</span>
-                    <span class="sync-time-badge">${item.time ? item.time.toFixed(2) + 's' : '--:--'}</span>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function toggleSyncPlayAudio() {
-            if(audio.paused) {
-                audio.play();
-                document.getElementById("syncPlayBtn").innerHTML = `<i class="fa-solid fa-pause"></i> إيقاف مؤقت`;
-            } else {
-                audio.pause();
-                document.getElementById("syncPlayBtn").innerHTML = `<i class="fa-solid fa-play"></i> تشغيل`;
-            }
-        }
-
-        window.addEventListener("keydown", (e) => {
-            if(e.code === "Space" && document.getElementById("syncModal").classList.contains("active")) {
-                e.preventDefault();
-                let song = songs[currentSongIndex];
-                if(song.lyrics && syncCurrentLineIndex < song.lyrics.length) {
-                    song.lyrics[syncCurrentLineIndex].time = audio.currentTime;
-                    syncCurrentLineIndex++;
-                    saveSongsToLocalStorage();
-                    renderSyncLines();
-                }
-            }
-        });
 
         audio.ontimeupdate = () => {
             if (audio.duration) {
@@ -1424,19 +991,8 @@
                 let dm = Math.floor(audio.duration / 60);
                 let ds = Math.floor(audio.duration % 60);
                 durationEl.innerText = `${dm}:${ds < 10 ? '0' : ''}${ds}`;
-
-                let syncTimeEl = document.getElementById("syncCurrentAudioTime");
-                if(syncTimeEl) {
-                    syncTimeEl.innerText = `${m}:${s < 10 ? '0' : ''}${s} (${audio.currentTime.toFixed(2)}s)`;
-                }
             }
         };
-
-        function saveSyncedLyrics() {
-            saveSongsToLocalStorage();
-            closeSyncModal();
-            alert("تم حفظ توقيتات المزامنة بنجاح عبر Space!");
-        }
 
         audio.onended = () => {
             if (repeatMode === "track") {
@@ -1465,36 +1021,6 @@
             const query = document.getElementById("searchInput").value.toLowerCase();
             const filtered = songs.filter(s => s.title.toLowerCase().includes(query) || s.artist.toLowerCase().includes(query));
             renderPlaylist(filtered);
-        }
-
-        async function deleteCurrentSong() {
-            if (confirm("Voulez-vous vraiment supprimer cette chanson de la liste ?")) {
-                const song = songs[currentSongIndex];
-                try {
-                    if (song?.audioBlobId) await deleteBlob(song.audioBlobId);
-                    if (song?.coverBlobId) await deleteBlob(song.coverBlobId);
-                } catch (error) {
-                    console.warn("Erreur lors de la suppression des fichiers liés :", error);
-                }
-
-                songs.splice(currentSongIndex, 1);
-                saveSongsToLocalStorage();
-                if (songs.length > 0) {
-                    currentSongIndex = Math.min(currentSongIndex, songs.length - 1);
-                    await loadSong(currentSongIndex);
-                } else {
-                    playlistContainer.innerHTML = "";
-                    songTitle.innerText = "Aucune chanson";
-                    artistName.innerText = "";
-                    albumCover.src = "assets/images/profile.jpg";
-                    bgBlur.style.backgroundImage = "none";
-                    audio.src = "";
-                    document.getElementById("songCreditsDetail").innerText = "";
-                    document.getElementById("playStatsCounter").innerHTML = `<i class="fa-solid fa-headphones"></i> Écoutes : 0`;
-                    document.getElementById("fileNamesDetail").innerText = "";
-                    renderPlaylist();
-                }
-            }
         }
 
         function shareSong() {
